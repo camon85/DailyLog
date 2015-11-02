@@ -1,14 +1,11 @@
-import com.camon.dailylog.AccountDto;
-import com.camon.dailylog.HelloController;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.camon.dailylog.Starter;
+import com.camon.dailylog.domain.AccountDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.SpringApplicationContextLoader;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringJUnit4ClassRunner.class)
 //@EnableAutoConfiguration
-@SpringApplicationConfiguration(classes = HelloController.class)
+@SpringApplicationConfiguration(classes = Starter.class)
 @WebAppConfiguration
 public class AccountControllerTest {
 

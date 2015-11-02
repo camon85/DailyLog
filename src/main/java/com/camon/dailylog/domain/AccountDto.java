@@ -1,4 +1,4 @@
-package com.camon.dailylog;
+package com.camon.dailylog.domain;
 
 import org.hibernate.validator.constraints.NotBlank;
 

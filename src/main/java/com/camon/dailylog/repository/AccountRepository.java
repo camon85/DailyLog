@@ -1,5 +1,6 @@
-package com.camon.dailylog;
+package com.camon.dailylog.repository;
 
+import com.camon.dailylog.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
