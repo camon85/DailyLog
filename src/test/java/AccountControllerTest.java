@@ -22,16 +22,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-//@EnableAutoConfiguration
 @SpringApplicationConfiguration(classes = Starter.class)
 @WebAppConfiguration
 public class AccountControllerTest {
 
     @Autowired
-    WebApplicationContext wac;
+    private WebApplicationContext wac;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Test
     public void createAccountTest() throws Exception {
@@ -42,7 +41,5 @@ public class AccountControllerTest {
         ResultActions result = mockMvc.perform(post("/accounts").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createDto)));
         result.andDo(print());
         result.andExpect(status().isCreated());
-
-
     }
 }

@@ -1,14 +1,17 @@
 package com.camon.dailylog.domain;
 
+import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Created by jooyong on 2015-11-02.
  */
 public class AccountDto {
 
+    @Data
     public static class Create {
         @NotBlank
         @Size(min = 5)
@@ -17,21 +20,15 @@ public class AccountDto {
         @NotBlank
         @Size(min = 5)
         private String password;
+    }
 
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
+    @Data
+    public static class Response {
+        private Long id;
+        private String username;
+        private String email;
+        private String fullName;
+        private Date joined;
+        private Date updated;
     }
 }

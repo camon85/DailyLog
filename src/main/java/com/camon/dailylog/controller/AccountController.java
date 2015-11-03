@@ -1,9 +1,9 @@
 package com.camon.dailylog.controller;
 
-import com.camon.dailylog.repository.AccountRepository;
-import com.camon.dailylog.service.AccountService;
 import com.camon.dailylog.domain.Account;
 import com.camon.dailylog.domain.AccountDto;
+import com.camon.dailylog.service.AccountService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class AccountController {
     private AccountService service;
 
     @Autowired
-    private AccountRepository repository;
+    private ModelMapper modelMapper;
 
     @RequestMapping(value = "/accounts", method = RequestMethod.POST)
     public ResponseEntity createAccount(@RequestBody @Valid AccountDto.Create create, BindingResult result) {
@@ -35,6 +35,9 @@ public class AccountController {
         }
 
         Account newAccount = service.createAccount(create);
-        return new ResponseEntity(newAccount, HttpStatus.CREATED);
+        AccountDto.Response responseDto =
+                modelMapper.map(newAccount, AccountDto.Response.class);
+
+        return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
 }
