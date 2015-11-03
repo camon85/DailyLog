@@ -1,6 +1,7 @@
-package com.camon.dailylog.repository;
+package com.camon.dailylog.accounts.repository;
 
-import com.camon.dailylog.domain.Account;
+
+import com.camon.dailylog.accounts.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -8,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
+    Account findByUsername(String username);
 }

@@ -1,4 +1,4 @@
-package com.camon.dailylog.domain;
+package com.camon.dailylog.accounts.domain;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;

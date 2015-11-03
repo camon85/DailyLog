@@ -1,8 +1,10 @@
-package com.camon.dailylog.service;
+package com.camon.dailylog.accounts.service;
 
-import com.camon.dailylog.repository.AccountRepository;
-import com.camon.dailylog.domain.Account;
-import com.camon.dailylog.domain.AccountDto;
+
+import com.camon.dailylog.accounts.domain.Account;
+import com.camon.dailylog.accounts.domain.AccountDto;
+import com.camon.dailylog.accounts.exception.UserDuplicatedException;
+import com.camon.dailylog.accounts.repository.AccountRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,12 @@ public class AccountService {
 
     public Account createAccount(AccountDto.Create dto) {
         Account account = modelMapper.map(dto, Account.class);
+        String username = dto.getUsername();
+
+        if (repository.findByUsername(username) != null) {
+            throw new UserDuplicatedException(username);
+        }
+
         Date now = new Date();
         account.setJoined(now);
         account.setUpdated(now);

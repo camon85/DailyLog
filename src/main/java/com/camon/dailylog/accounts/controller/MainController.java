@@ -1,4 +1,4 @@
-package com.camon.dailylog.controller;
+package com.camon.dailylog.accounts.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

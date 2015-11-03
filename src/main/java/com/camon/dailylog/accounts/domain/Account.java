@@ -1,4 +1,4 @@
-package com.camon.dailylog.domain;
+package com.camon.dailylog.accounts.domain;
 
 import lombok.Data;
 
@@ -15,9 +15,10 @@ public class Account {
     @GeneratedValue
     private Long id;
 
-    private String password;
-
+    @Column(unique = true)
     private String username;
+
+    private String password;
 
     private String email;
 
