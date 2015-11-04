@@ -22,4 +22,11 @@ public class BCryptTest {
         assertTrue(BCrypt.checkpw(password, hashPass));
         assertFalse(BCrypt.checkpw(password2, hashPass));
     }
+
+    @Test
+    public void salt() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(BCrypt.gensalt(15));
+        }
+    }
 }
