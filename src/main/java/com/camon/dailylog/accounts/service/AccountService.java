@@ -5,7 +5,10 @@ import com.camon.dailylog.accounts.domain.Account;
 import com.camon.dailylog.accounts.domain.AccountDto;
 import com.camon.dailylog.accounts.exception.UserDuplicatedException;
 import com.camon.dailylog.accounts.repository.AccountRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +20,10 @@ import java.util.Date;
  */
 @Service
 @Transactional
+@Slf4j
 public class AccountService {
+
+//    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private AccountRepository repository;
@@ -30,6 +36,8 @@ public class AccountService {
         String username = dto.getUsername();
 
         if (repository.findByUsername(username) != null) {
+//            logger.error("UserDuplicatedException: {}", username);
+            log.error("UserDuplicatedException: {}", username);
             throw new UserDuplicatedException(username);
         }
 
