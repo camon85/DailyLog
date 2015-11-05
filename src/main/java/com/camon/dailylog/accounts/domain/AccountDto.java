@@ -25,17 +25,26 @@ public class AccountDto {
     @Data
     public static class Response {
         private Long id;
+
         private String username;
+
         private String email;
+
         private String fullName;
+
         private Date joined;
+
         private Date updated;
     }
 
     @Data
     public static class Update {
+        @NotBlank
+        @Size(min = 5)
         private String password;
+
         private String email;
+
         private String fullName;
     }
 }

@@ -21,6 +21,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 /**
  * Created by jooyong on 2015-11-02.
  */
@@ -54,7 +56,7 @@ public class AccountController {
         return errorResponse;
     }
 
-    @RequestMapping(value = "/accounts", method = RequestMethod.POST)
+    @RequestMapping(value = "/accounts", method = POST)
     public ResponseEntity createAccount(@RequestBody @Valid AccountDto.Create create, BindingResult result) {
         // TODO validator로 빼버릴까
         if (result.hasErrors()) {
@@ -70,7 +72,7 @@ public class AccountController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/accounts", method = RequestMethod.GET)
+    @RequestMapping(value = "/accounts", method = GET)
     @ResponseStatus(HttpStatus.OK)
     public PageImpl<AccountDto.Response> findAll(Pageable pageable) {
         Page<Account> page = repository.findAll(pageable);
@@ -79,24 +81,30 @@ public class AccountController {
         return new PageImpl<>(content, pageable, page.getTotalElements());
     }
 
-    @RequestMapping(value = "/accounts/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/accounts/{id}", method = GET)
     @ResponseStatus(HttpStatus.OK)
     public AccountDto.Response findById(@PathVariable Long id) {
-        Account account = repository.findOne(id);
+        Account account = service.findAccount(id);
         AccountDto.Response result = modelMapper.map(account, AccountDto.Response.class);
         return result;
     }
 
-    @RequestMapping(value = "/accounts/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/accounts/{id}", method = PUT)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity updateAccount(@PathVariable Long id, @RequestBody @Valid AccountDto.Update updateDto, BindingResult result) {
-
+    public ResponseEntity updateAccount(@PathVariable Long id, @RequestBody @Valid AccountDto.Update updateDto,
+                                        BindingResult result) {
         if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Account account = repository.findOne(id);
+        Account account = service.findAccount(id);
         Account updatedAccount = service.updateAccount(account, updateDto);
         return new ResponseEntity<>(modelMapper.map(updatedAccount, AccountDto.Response.class), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/accounts/{id}", method = DELETE)
+    public ResponseEntity deleteAccout(@PathVariable Long id) {
+        service.deleteAccount(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
