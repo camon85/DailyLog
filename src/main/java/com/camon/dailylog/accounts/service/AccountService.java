@@ -7,8 +7,6 @@ import com.camon.dailylog.accounts.exception.UserDuplicatedException;
 import com.camon.dailylog.accounts.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +34,6 @@ public class AccountService {
         String username = dto.getUsername();
 
         if (repository.findByUsername(username) != null) {
-//            logger.error("UserDuplicatedException: {}", username);
             log.error("UserDuplicatedException: {}", username);
             throw new UserDuplicatedException(username);
         }
@@ -46,5 +43,19 @@ public class AccountService {
         account.setUpdated(now);
 
         return repository.save(account);
+    }
+
+    public Account updateAccount(Account account, AccountDto.Update updataDto) {
+        account.setPassword(updataDto.getPassword());
+        account.setFullName(updataDto.getFullName());
+        return account;
+    }
+
+    public Account findAccount(Long id) {
+        Account account = repository.findOne(id);
+        if (account == null) {
+            throw new AccountNotFoundException(id);
+        }
+        return account;
     }
 }

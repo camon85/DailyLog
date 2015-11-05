@@ -1,4 +1,5 @@
 import com.camon.dailylog.Starter;
+import com.camon.dailylog.accounts.domain.Account;
 import com.camon.dailylog.accounts.domain.AccountDto;
 import com.camon.dailylog.accounts.service.AccountService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -112,4 +114,37 @@ public class AccountControllerTest {
         result.andExpect(status().isOk());
     }
 
+    @Test
+    public void findById() throws Exception {
+        AccountDto.Create createDto = new AccountDto.Create();
+        createDto.setUsername("jooyong");
+        createDto.setPassword("password");
+        Account account = service.createAccount(createDto);
+
+        ResultActions result = mockMvc.perform(get("/accounts/" + account.getId()));
+        result.andDo(print());
+        result.andExpect(status().isOk());
+        result.andExpect(jsonPath("$.username", is("jooyong")));
+    }
+
+    @Test
+    public void updateAccount() throws Exception {
+        AccountDto.Create createDto = new AccountDto.Create();
+        createDto.setUsername("jooyong");
+        createDto.setPassword("password");
+        Account account = service.createAccount(createDto);
+
+        AccountDto.Update updateDto = new AccountDto.Update();
+        updateDto.setFullName("jooyong sung");
+        updateDto.setPassword("pass");
+
+        ResultActions result = mockMvc.perform(put("/accounts/" + account.getId()).
+                contentType(MediaType.APPLICATION_JSON).
+                content(objectMapper.writeValueAsBytes(updateDto)));
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
+        result.andExpect(jsonPath("$.fullName", is("jooyong sung")));
+
+    }
 }
