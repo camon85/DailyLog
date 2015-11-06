@@ -66,4 +66,4 @@ var Sign = React.createClass({
     }
 });
 
-React.render(<Nav/>, document.body);
+React.render(<Main/>, document.body);
