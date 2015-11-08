@@ -8,6 +8,7 @@ import com.camon.dailylog.accounts.repository.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,11 @@ import java.util.Date;
 @Slf4j
 public class AccountService {
 
-//    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private AccountRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -38,6 +40,7 @@ public class AccountService {
             throw new UserDuplicatedException(username);
         }
 
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         Date now = new Date();
         account.setJoined(now);
         account.setUpdated(now);
@@ -45,8 +48,9 @@ public class AccountService {
         return repository.save(account);
     }
 
-    public Account updateAccount(Account account, AccountDto.Update updataDto) {
-        account.setPassword(updataDto.getPassword());
+    public Account updateAccount(Long id, AccountDto.Update updataDto) {
+        Account account = findAccount(id);
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setFullName(updataDto.getFullName());
         return account;
     }

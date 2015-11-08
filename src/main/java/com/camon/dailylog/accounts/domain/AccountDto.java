@@ -39,7 +39,6 @@ public class AccountDto {
 
     @Data
     public static class Update {
-        @NotBlank
         @Size(min = 5)
         private String password;
 

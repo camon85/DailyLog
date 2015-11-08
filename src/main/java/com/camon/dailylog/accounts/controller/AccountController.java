@@ -97,8 +97,7 @@ public class AccountController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Account account = service.findAccount(id);
-        Account updatedAccount = service.updateAccount(account, updateDto);
+        Account updatedAccount = service.updateAccount(id, updateDto);
         return new ResponseEntity<>(modelMapper.map(updatedAccount, AccountDto.Response.class), HttpStatus.OK);
     }
 

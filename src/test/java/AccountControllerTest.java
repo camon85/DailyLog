@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,6 +20,8 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.transaction.Transactional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,10 +48,14 @@ public class AccountControllerTest {
 
     private MockMvc mockMvc;
 
+    @Autowired
+    private FilterChainProxy springSecurityFilterChain;
 
     @Before
     public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilter(springSecurityFilterChain)
+                .build();
     }
 
     @Test
@@ -56,8 +63,9 @@ public class AccountControllerTest {
         AccountDto.Create createDto = new AccountDto.Create();
         createDto.setUsername("jooyong");
         createDto.setPassword("password");
-        ResultActions result = mockMvc.perform(post("/accounts").
-                contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createDto)));
+        ResultActions result = mockMvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDto)));
         result.andDo(print());
         result.andExpect(status().isCreated());
         result.andExpect(jsonPath("$.username", is("jooyong")));
@@ -68,8 +76,9 @@ public class AccountControllerTest {
         AccountDto.Create createDto = new AccountDto.Create();
         createDto.setUsername("     ");
         createDto.setPassword("password");
-        ResultActions result = mockMvc.perform(post("/accounts").
-                contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createDto)));
+        ResultActions result = mockMvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDto)));
         result.andDo(print());
         result.andExpect(status().isBadRequest());
     }
@@ -79,8 +88,9 @@ public class AccountControllerTest {
         AccountDto.Create createDto = new AccountDto.Create();
         createDto.setUsername("jooyong");
         createDto.setPassword("1");
-        ResultActions result = mockMvc.perform(post("/accounts").
-                contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createDto)));
+        ResultActions result = mockMvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDto)));
         result.andDo(print());
         result.andExpect(status().isBadRequest());
     }
@@ -90,10 +100,12 @@ public class AccountControllerTest {
         AccountDto.Create createDto = new AccountDto.Create();
         createDto.setUsername("jooyong");
         createDto.setPassword("password");
-        ResultActions result = mockMvc.perform(post("/accounts").
-                contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createDto)));
-        result = mockMvc.perform(post("/accounts").
-                contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(createDto)));
+        ResultActions result = mockMvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDto)));
+        result = mockMvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDto)));
 
         result.andDo(print());
         result.andExpect(status().isBadRequest());
@@ -139,11 +151,10 @@ public class AccountControllerTest {
 
         AccountDto.Update updateDto = new AccountDto.Update();
         updateDto.setFullName("jooyong sung");
-        updateDto.setPassword("pass");
-
-        ResultActions result = mockMvc.perform(put("/accounts/" + account.getId()).
-                contentType(MediaType.APPLICATION_JSON).
-                content(objectMapper.writeValueAsBytes(updateDto)));
+        updateDto.setPassword("changed_password");
+        ResultActions result = mockMvc.perform(put("/accounts/" + account.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(updateDto)));
 
         result.andDo(print());
         result.andExpect(status().isOk());
@@ -164,7 +175,8 @@ public class AccountControllerTest {
         createDto.setPassword("password");
         Account account = service.createAccount(createDto);
 
-        ResultActions result = mockMvc.perform(delete("/accounts/" + account.getId()));
+        ResultActions result = mockMvc.perform(delete("/accounts/" + account.getId())
+            .with(httpBasic(createDto.getUsername(), createDto.getPassword())));
         result.andDo(print());
         result.andExpect(status().isNoContent());
     }
