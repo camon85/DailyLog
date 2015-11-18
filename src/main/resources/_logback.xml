@@ -40,15 +40,9 @@
 		<encoder class="net.logstash.logback.encoder.LogstashEncoder" />
 	</appender>
 
-	<appender name="LOGSTASH-ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_FILE_PATH}/${PROJECT_NAME}-logstash-access.log</file>
-		<encoder class="net.logstash.logback.encoder.LogstashAccessEncoder" />
-	</appender>
-
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 		<appender-ref ref="LOGSTASH" />
-		<appender-ref ref="LOGSTASH-ACCESS" />
 	</root>
 </configuration>

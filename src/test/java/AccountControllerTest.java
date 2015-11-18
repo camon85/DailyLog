@@ -2,7 +2,9 @@ import com.camon.dailylog.Starter;
 import com.camon.dailylog.accounts.domain.Account;
 import com.camon.dailylog.accounts.domain.AccountDto;
 import com.camon.dailylog.accounts.service.AccountService;
+import com.camon.dailylog.articles.model.Article;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -103,13 +105,13 @@ public class AccountControllerTest {
         ResultActions result = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
-        result = mockMvc.perform(post("/accounts")
+        ResultActions result2 = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
 
-        result.andDo(print());
-        result.andExpect(status().isBadRequest());
-        result.andExpect(jsonPath("$.code", is("duplicated.username.exception")));
+        result2.andDo(print());
+        result2.andExpect(status().isBadRequest());
+        result2.andExpect(jsonPath("$.code", is("duplicated.username.exception")));
     }
 
     @Test
@@ -179,6 +181,20 @@ public class AccountControllerTest {
             .with(httpBasic(createDto.getUsername(), createDto.getPassword())));
         result.andDo(print());
         result.andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void aaaaa() {
+        Article article = new Article();
+        Account account = new Account();
+        article.setContent("내용");
+        account.setId(1L);
+        account.setUsername("jy");
+        article.setAccount(account);
+        Gson gson = new Gson();
+        String jsonStr = gson.toJson(article);
+        System.out.println(jsonStr);
+
     }
 
 }

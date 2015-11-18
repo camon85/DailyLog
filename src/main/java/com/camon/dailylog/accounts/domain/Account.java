@@ -1,9 +1,11 @@
 package com.camon.dailylog.accounts.domain;
 
+import com.camon.dailylog.articles.model.Article;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by jooyong on 2015-11-02.
@@ -31,4 +33,7 @@ public class Account {
     private Date updated;
 
     private boolean admin;
+
+    @OneToMany(mappedBy = "account")
+    private List<Article> articles;
 }
