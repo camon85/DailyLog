@@ -1,6 +1,7 @@
 package com.camon.dailylog.accounts.domain;
 
 import com.camon.dailylog.articles.model.Article;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -35,5 +36,6 @@ public class Account {
     private boolean admin;
 
     @OneToMany(mappedBy = "account")
+    @JsonIgnore
     private List<Article> articles;
 }
