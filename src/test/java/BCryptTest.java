@@ -1,5 +1,7 @@
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -28,5 +30,12 @@ public class BCryptTest {
         for (int i = 0; i < 10; i++) {
             System.out.println(BCrypt.gensalt(15));
         }
+    }
+
+    @Test
+    public void encode () {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String password = passwordEncoder.encode("password");
+        System.out.println(password);
     }
 }

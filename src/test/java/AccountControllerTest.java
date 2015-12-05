@@ -23,7 +23,6 @@ import javax.transaction.Transactional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -194,7 +193,6 @@ public class AccountControllerTest {
         Gson gson = new Gson();
         String jsonStr = gson.toJson(article);
         System.out.println(jsonStr);
-
     }
 
 }
